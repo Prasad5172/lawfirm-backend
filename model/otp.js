@@ -12,7 +12,7 @@ const OtpModel = db.define("otp",{
     },
     sms:{
         type:Sequelize.STRING,
-        allowNull:false
+        allowNull:false   
    },
    expires_in: {
        type: Sequelize.DATE,

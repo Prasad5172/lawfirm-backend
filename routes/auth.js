@@ -5,7 +5,7 @@ const router = express.Router()
 const {emailController,otpController,userController} = require("../controller")
 const {auth,oauth} = require("../middleware")
 
-router.route("/sendEmail").post(emailController.sendEmail)
+router.route("/sendOtp").post(emailController.sendOtp)
 router.route("/verifyOtp").post(otpController.verifyOtp)
 router.route("/signup").post(userController.register)
 router.route("/signin").post(userController.login)

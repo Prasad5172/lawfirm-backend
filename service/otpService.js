@@ -4,7 +4,8 @@ const { otpRepository } = require("../repository")
 
 const Otp = (model) => ({
     sms: model.sms,
-    user_id: model.user_id
+    user_id: model.user_id,
+    expires_in:model.expires_in
 })
 
 exports.create = async (newUser) => {
@@ -15,6 +16,9 @@ exports.create = async (newUser) => {
     console.log("otpInDb" + otpInDb)
     if (otpInDb) {
         otpInDb.sms = otpHash
+        const date = new Date();
+        date.setMinutes(date.getMinutes() + 10);
+        otpInDb.expires_in = date;
         return await otpInDb.save()
     } else {
         otpInDb = await otpRepository.create(Otp(newUser)).catch((error) => {

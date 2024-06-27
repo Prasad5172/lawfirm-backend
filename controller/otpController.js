@@ -2,7 +2,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const bcryptjs = require("bcryptjs");
 const {UserModel,OtpModel} = require("../model");
-const { responseHandler, asyncHandler, getJwtToken, isExpired } = require('../helpers');
+const { responseHandler, asyncHandler, getJwtToken } = require('../helpers');
 
 
 exports.verifyOtp = async (req,res,next) => {
@@ -23,10 +23,16 @@ exports.verifyOtp = async (req,res,next) => {
     if (!user || !user.otp) {
         return res.status(400).json("Invalid email or OTP");
     }
+    // console.log(user.otp);
     const otpInDb = user.otp.sms;
+    const curDate = new Date().getTime();
     const expiresIn = user.otp.expires_in;
+    console.log(expiresIn);
+    console.log(new Date());
     // Check if OTP has expired
-    if (new Date() > new Date(expiresIn)) {
+    console.log()
+    if ( curDate > expiresIn ) {
+        return res.status(400).json({cur:new Date(),old:new Date(expiresIn)})
         return res.status(400).json("OTP has expired");
     }
     if (!otpInDb ) { return res.status(400).json("expired")}
@@ -39,7 +45,7 @@ exports.verifyOtp = async (req,res,next) => {
                 id: user.user_id
             }
         }
-        return getJwtToken(payload, "succesful",60, (err, data) => {
+        return getJwtToken(payload, "succesful",600, (err, data) => {
             if (err) {
                 return res.status(err.code).json(err);
             }

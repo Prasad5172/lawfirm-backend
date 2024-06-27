@@ -20,12 +20,4 @@ exports.getJwtToken = (payload, logMessage,expireIn, result) => {
 };
 
 
-exports.isExpired =async (exp) => {
-  const currentTime = Math.floor(Date.now() / 1000);
-  if(currentTime < exp){
-    return true;
-  }
-  return false;
-  
-}
 

@@ -12,15 +12,15 @@ const { responseHandler } = require("../helpers");
 
 
 
-exports.sendEmail = async (req, res, next) => {
+exports.sendOtp = async (req, res,next) => {
     const {email} = req.body;
     console.log("sendemail");
-    // const user = await userRepository.retrieveOne({email:email});
-    // if(!user){
-    //     return res.status(400).json("signup");
-    // }
+    const user = await userRepository.retrieveOne({email:email});
+    if(!user){
+        return res.status(400).json("signup");
+    }
     try {
-         await emailService.sendOtpToEmail(req.body,user.id,(err,data) => {
+         await emailService.sendOtpToEmail(req.body,user.user_id,(err,data) => {
             if(err){
                 return res.status(err.code).json(err);
             }
@@ -28,23 +28,23 @@ exports.sendEmail = async (req, res, next) => {
             return res.status(200).json(data)
         });
     } catch (error) {
+        console.log(error)
         return res
         .status(500)
-        .json(responseHandler(true, 500, 'Server Error', null));
+        .json(responseHandler(true, 500, error, null));
     }
 };
 
-exports.sendContactData = async (req, res, next) => {
-    const {email,username,phone,message} = req.body;
+exports.sendContactData = async (req, res,next) => {
+    
     console.log("senddata");
     try {
-         await emailService.sendData(req.body,(err,data) => {
-            if(err){
+        await emailService.sendData(req.body, (err, data) => {
+            if (err) {
                 return res.status(err.code).json(err);
             }
-            console.log(data);
             return res.status(200).json(data)
-        });
+        })
     } catch (error) {
         console.log(error);
         return res

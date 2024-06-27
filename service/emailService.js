@@ -17,7 +17,7 @@ exports.mailTransporter = async (isFormData,data,otp,result) => {
             pass: process.env.REACT_APP_PASSWORD
         }
     });
-    
+    console.log(data.email);
     var mailOptions = {
         from: process.env.REACT_APP_USER,
         to: data.email,
@@ -29,7 +29,7 @@ exports.mailTransporter = async (isFormData,data,otp,result) => {
             console.log("error" ,error)
             return result(responseHandler(false,error.statusCode,error.message,null),null)
         }
-        return result(null,responseHandler(true,200,"otpsend",null))
+        return result(null,responseHandler(true,200,isFormData ? "data sent":"otp sent",null))
     });
     console.log("end of mailTransporter")
 }
@@ -43,13 +43,16 @@ exports.sendOtpToEmail = async (data,userId,result) => {
             upperCaseAlphabets: false,
             alphabets: false,
         });
-        await otpService.create({email:data.email,sms: otp,user_id:userId});
+        const date = new Date();
+        console.log(date);
+        date.setMinutes(date.getMinutes() + 10);
+        console.log(date);
+        await otpService.create({expires_in:date,sms: otp,user_id:userId});
         await this.mailTransporter(false,data, otp,result);
         console.log(otp)
         return otp;
 };
 
-exports.sendData = async (contactData,userId,result) => {
+exports.sendData = async (contactData,result) => {
         await this.mailTransporter(true,contactData,0,result);
-        console.log("end of sendData")
 };

@@ -1,6 +1,6 @@
 const bcryptjs = require("bcryptjs")
 const { userService } = require("../service")
-const { responseHandler, asyncHandler, getJwtToken, isExpired } = require('../helpers');
+const { responseHandler, asyncHandler, getJwtToken } = require('../helpers');
 const { userRepository } = require("../repository")
 const { emailService } = require("../service");
 const jwt = require("jsonwebtoken")
@@ -63,7 +63,7 @@ exports.register = asyncHandler(async (req, res) => {
             // console.log("after",checkUser)
         }
         // console.log("checkUser",checkUser)
-        await emailService.sendOtpToEmail(req.body.email, checkUser.user_id, (err, data) => {
+        await emailService.sendOtpToEmail(req.body, checkUser.user_id, (err, data) => {
             if (err) {
                 return res.status(err.code).json(err);
             }

@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs')
-const { responseHandler, getJwtToken } = require('../helpers');
+const { responseHandler } = require('../helpers');
 const { userRepository } = require("../repository")
 
 

@@ -23,7 +23,7 @@ const UserModel = db.define("user", {
             isEmail: true,
         },
     },
-    isAdmin:{
+    is_admin:{
         type:Sequelize.BOOLEAN,
         defaultValue:false,
     },
@@ -44,9 +44,26 @@ const UserModel = db.define("user", {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
+    },
+    google_id: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true, // Assuming a Google ID is unique per user
     }
 
-}, { timestamps: false });
+}, {
+     timestamps: false,
+     indexes: [
+        {
+            unique: true,
+            fields: ['email']
+        },
+        {
+            unique: true,
+            fields: ['google_id']
+        }
+    ]
+});
 
 
 module.exports = { UserModel }

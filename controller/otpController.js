@@ -42,7 +42,9 @@ exports.verifyOtp = async (req,res,next) => {
         user.save()
         const payload = {
             user: {
-                id: user.user_id
+                id: user.user_id,
+                email: user.email,
+                isAdmin
             }
         }
         return getJwtToken(payload, "succesful",600, (err, data) => {
